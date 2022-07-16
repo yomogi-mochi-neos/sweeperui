@@ -8,9 +8,7 @@ defmodule SweeperuiWeb.SweeperLive do
 
   def mount(_session, _, socket), do: {:ok, start_game(socket)}
 
-  @doc """
-    ゲーム実行中のrender
-  """
+  # ゲーム実行中のrender
   def render(%{state: :playing} = assigns) do
     ~L"""
       <div style="width: 320px; margin: auto;">
@@ -23,9 +21,7 @@ defmodule SweeperuiWeb.SweeperLive do
     """
   end
 
-  @doc """
-    ゲーム開始前のrender
-  """
+  # ゲーム開始前のrender
   def render(%{state: :starting} = assigns) do
     ~L"""
       <div style="width: 640px; margin: auto;">
@@ -37,9 +33,7 @@ defmodule SweeperuiWeb.SweeperLive do
     """
   end
 
-  @doc """
-    ゲームオーバー時のrender
-  """
+  # ゲームオーバー時のrender
   def render(%{state: :game_over} = assigns) do
     ~L"""
       <div style="width: 320px; margin: auto;">
@@ -55,9 +49,7 @@ defmodule SweeperuiWeb.SweeperLive do
     """
   end
 
-  @doc """
-    ゲームクリア時のrender
-  """
+  # ゲームクリア時のrender
   def render(%{state: :game_clear} = assigns) do
     ~L"""
       <div style="width: 320px; margin: auto;">
@@ -79,9 +71,7 @@ defmodule SweeperuiWeb.SweeperLive do
     """
   end
 
-  @doc """
-    ゲーム開始前のrenderを表示
-  """
+  # ゲーム開始前のrenderを表示
   defp start_game(socket) do
     assign(
       socket,
@@ -89,9 +79,7 @@ defmodule SweeperuiWeb.SweeperLive do
     )
   end
 
-  @doc """
-    ゲーム実行中のrenderを表示
-  """
+  # ゲーム実行中のrenderを表示
   defp new_game(socket) do
     assign(socket,
       state: :playing,
@@ -114,9 +102,7 @@ defmodule SweeperuiWeb.SweeperLive do
 
   defp button_foot(), do: "</div>"
 
-  @doc """
-    ゲーム終了時のsvgを表示
-  """
+  # ゲーム終了時のsvgを表示
   defp svgs(field, state) when state == :game_over or state == :game_clear do
     field
     |> Map.keys()
@@ -126,10 +112,8 @@ defmodule SweeperuiWeb.SweeperLive do
     |> Enum.join("\n")
   end
 
-  @doc """
-    ゲーム実行中のsvgを表示
-  """
-  defp svgs(field, state) do
+  # ゲーム実行中のsvgを表示
+  defp svgs(field, _state) do
     field
     |> Map.keys()
     |> Enum.sort()
@@ -138,10 +122,8 @@ defmodule SweeperuiWeb.SweeperLive do
     |> Enum.join("\n")
   end
 
-  @doc """
-    ゲーム終了時、開かれていない爆弾を表示する。
-  """
-  def compute_component_when_game_finish(point, %{is_open: is_open, is_bomb: is_bomb}) when not is_open and is_bomb do
+  # ゲーム終了時、開かれていない爆弾を表示する。
+  defp compute_component_when_game_finish(point, %{is_open: is_open, is_bomb: is_bomb}) when not is_open and is_bomb do
     [
       svg_head(point),
       closed_box(point),
@@ -150,10 +132,8 @@ defmodule SweeperuiWeb.SweeperLive do
     ]
   end
 
-  @doc """
-    ゲーム終了時、開かれていないフィールドを表示する。
-  """
-  def compute_component_when_game_finish(point, %{is_open: is_open}) when not is_open do
+  # ゲーム終了時、開かれていないフィールドを表示する。
+  defp compute_component_when_game_finish(point, %{is_open: is_open}) when not is_open do
     [
       svg_head(point),
       closed_box(point),
@@ -161,10 +141,8 @@ defmodule SweeperuiWeb.SweeperLive do
     ]
   end
 
-  @doc """
-    ゲーム終了時、開かれている爆弾フィールドを表示する。
-  """
-  def compute_component_when_game_finish(point, %{is_bomb: is_bomb}) when is_bomb do
+  # ゲーム終了時、開かれている爆弾フィールドを表示する。
+  defp compute_component_when_game_finish(point, %{is_bomb: is_bomb}) when is_bomb do
     [
       svg_head(point),
       red_box(point),
@@ -173,10 +151,8 @@ defmodule SweeperuiWeb.SweeperLive do
     ]
   end
 
-  @doc """
-    ゲーム終了時、開かれているフィールドを表示する。
-  """
-  def compute_component_when_game_finish(point, %{number: number}) do
+  # ゲーム終了時、開かれているフィールドを表示する。
+  defp compute_component_when_game_finish(point, %{number: number}) do
     [
       svg_head(point),
       opened_svg(point, number),
@@ -184,10 +160,8 @@ defmodule SweeperuiWeb.SweeperLive do
     ]
   end
 
-  @doc """
-    ゲーム実行中、開かれていないフィールドを表示する。
-  """
-  def compute_component(point, %{is_open: is_open}) when not is_open do
+  # ゲーム実行中、開かれていないフィールドを表示する。
+  defp compute_component(point, %{is_open: is_open}) when not is_open do
     [
       button_head(point),
       svg_head(point),
@@ -197,10 +171,8 @@ defmodule SweeperuiWeb.SweeperLive do
     ]
   end
 
-  @doc """
-    ゲーム実行中、開かれている爆弾フィールドを表示する。
-  """
-  def compute_component(point, %{is_bomb: is_bomb}) when is_bomb do
+  # ゲーム実行中、開かれている爆弾フィールドを表示する。
+  defp compute_component(point, %{is_bomb: is_bomb}) when is_bomb do
     [
       svg_head(point),
       bomb_svg(point),
@@ -208,10 +180,8 @@ defmodule SweeperuiWeb.SweeperLive do
     ]
   end
 
-  @doc """
-    ゲーム実行中、開かれているフィールドを表示する。
-  """
-  def compute_component(point, %{number: number}) do
+  # ゲーム実行中、開かれているフィールドを表示する。
+  defp compute_component(point, %{number: number}) do
     [
       svg_head(point),
       opened_svg(point, number),
@@ -219,7 +189,7 @@ defmodule SweeperuiWeb.SweeperLive do
     ]
   end
 
-  def svg_head(point) do
+  defp svg_head(point) do
     {x, y} = to_pixels(point)
 
     """
@@ -234,11 +204,11 @@ defmodule SweeperuiWeb.SweeperLive do
     """
   end
 
-  def svg_foot(), do: "</svg>"
+  defp svg_foot(), do: "</svg>"
 
   defp to_pixels({x, y}), do: {x * @box_width, y * @box_height}
 
-  def bomb_svg(point) do
+  defp bomb_svg(point) do
     pixel = to_pixels(point)
     {_, svg_raw} = File.read(Path.join(:code.priv_dir(:sweeperui), "static/images/svgs/bomb.svg"))
 
@@ -274,7 +244,7 @@ defmodule SweeperuiWeb.SweeperLive do
 
   defp opened_svg_foot(), do: "</g>"
 
-  def closed_box(point) do
+  defp closed_box(point) do
     {x, y} = to_pixels(point)
     {w, h} = {@box_width, @box_height}
 
@@ -289,7 +259,7 @@ defmodule SweeperuiWeb.SweeperLive do
     """
   end
 
-  def red_box(point) do
+  defp red_box(point) do
     {x, y} = to_pixels(point)
     {w, h} = {@box_width, @box_height}
 
@@ -298,10 +268,8 @@ defmodule SweeperuiWeb.SweeperLive do
     """
   end
 
-  @doc """
-    爆弾フィールドが開かれたかを判定する。
-  """
-  def is_game_over?(field) do
+  # 爆弾フィールドが開かれたかを判定する。
+  defp is_game_over?(field) do
     failure_count =
       field
       |> Map.filter(fn {_, v} -> v.is_open && v.is_bomb end)
@@ -310,10 +278,8 @@ defmodule SweeperuiWeb.SweeperLive do
     failure_count != 0
   end
 
-  @doc """
-    爆弾ではないフィールドが全て開かれたかを判定する。
-  """
-  def is_full_open?(field) do
+  # 爆弾ではないフィールドが全て開かれたかを判定する。
+  defp is_full_open?(field) do
     safe_count =
       field
       |> Map.filter(fn {_, v} -> !v.is_bomb end)
@@ -327,7 +293,7 @@ defmodule SweeperuiWeb.SweeperLive do
     safe_count == open_count
   end
 
-  def compute_game_state(socket, field) do
+  defp compute_game_state(socket, field) do
     cond do
       is_game_over?(field) ->
         assign(socket, state: :game_over)
@@ -340,9 +306,7 @@ defmodule SweeperuiWeb.SweeperLive do
     end
   end
 
-  @doc """
-    `{x_str, y_str}`地点のフィールドを開き、game_stateを判定する。
-  """
+  # `{x_str, y_str}`地点のフィールドを開き、game_stateを判定する。
   defp try_open_field(:playing, socket, {x_str, y_str}) do
     point = {String.to_integer(x_str), String.to_integer(y_str)}
 

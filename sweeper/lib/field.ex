@@ -51,7 +51,6 @@ defmodule Sweeper.Field do
     |> Enum.random()
   end
 
-
   @doc """
     `{x, y}`の周囲8マスの座標を取得する。
   """
